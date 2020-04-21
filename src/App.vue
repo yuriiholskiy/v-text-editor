@@ -31,14 +31,14 @@
           <input id="color" type="color" v-model="color" />
         </label>
       </div>
-      <v-add-info @show-result="show" />
+      <v-add-info @show-result="show('color')" />
     </div>
-    <pre class="mt-5 px-2" v-else>{{ JSON.stringify(outputArr, null, 4) }}</pre>
+    <pre class="mt-5 px-2" v-else>{{ JSON.stringify(output, null, 4) }}</pre>
   </div>
 </template>
 
 <script>
-import { groupBy, checkEqualityProp } from '@/utils';
+import { groupBy, uniqueArray } from '@/utils';
 import VNavbar from '@/components/VNavbar';
 import VEditor from '@/components/VEditor';
 import VAddInfo from '@/components/VAddInfo';
@@ -53,12 +53,12 @@ export default {
       content: [
         {
           text: 'some text',
-          color: 'lightblue',
+          color: 'red',
           backgroundColor: '#fff',
           fontSize: '20px'
         }
       ],
-      outputArr: {},
+      output: {},
       isShowResult: false
     };
   },
@@ -78,37 +78,31 @@ export default {
       this.isNumber = true;
       document.execCommand('fontSize', true, this.fontSize);
     },
-    show() {
-      let index = 0;
-
-      // combine sibling arr
-      const combined = this.content.map((c, i) => {
-        const current = this.content[i];
-        const next = this.content[i + 1] || {};
-        if (
-          checkEqualityProp(current, next, 'fontSize') &&
-          checkEqualityProp(current, next, 'color') &&
-          checkEqualityProp(current, next, 'backgroundColor')
-        ) {
-          index = i + 1;
-          return { ...current, text: `${current.text} ${next.text}` };
-        } else {
-          return c;
-        }
-      });
-      // combine by all properties, I think it's better than first combine
-      const combinedByAllProps = groupBy([
+    show(prop = 'color') {
+      // combine by color property
+      // can change to bgColor, etc.
+      const combinedByProp = groupBy([prop])(this.content);
+      const combinedByAllAllProps = groupBy([
         'color',
         'fontSize',
         'backgroundColor'
       ])(this.content);
-
-      if (index) {
-        combined.splice(index, 1);
-      }
-      this.outputArr = {
-        combined,
-        combinedByAllProps
+      let arr = [];
+      Object.keys(combinedByProp).forEach((key) => {
+        const val = combinedByProp[key];
+        let text = '';
+        for (let i = 0; i < val.length; i++) {
+          text += ' ' + val[i].text;
+          arr.push({
+            ...val[i],
+            text: text.trimStart()
+          });
+        }
+      });
+      this.output = {
+        arr: uniqueArray(arr, prop),
+        // for testing
+        combinedByAllAllProps
       };
       this.isShowResult = true;
     }

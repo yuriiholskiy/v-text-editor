@@ -5,6 +5,10 @@ export const groupBy = (keys) => (array) =>
     return objectsByKeyValue;
   }, {});
 
-export const checkEqualityProp = (obj1, obj2, prop) => {
-  return obj1[prop] === obj2[prop];
-};
+export const uniqueArray = (arr, prop) => [
+  ...new Map(arr.map((item) => [item[prop], item])).values()
+];
+
+export const getNodes = (str) => [
+  ...new DOMParser().parseFromString(str, 'text/html').body.childNodes
+];

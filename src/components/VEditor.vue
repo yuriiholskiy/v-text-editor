@@ -1,8 +1,9 @@
 <template>
-  <p id="v-editor" ref="editable" contenteditable v-on="listeners" />
+  <div id="v-editor" ref="editable" contenteditable v-on="listeners" />
 </template>
 
 <script>
+import { getNodes } from '@/utils';
 export default {
   name: 'VEditor',
   props: {
@@ -31,18 +32,22 @@ export default {
     document.execCommand('StyleWithCSS', false, true);
   },
   methods: {
-    getNodes(str) {
-      return [
-        ...new DOMParser().parseFromString(str, 'text/html').body.childNodes
-      ];
-    },
     onInput(e) {
       const formatedHTML = e.target.innerHTML
         .replace(/<div>/g, '')
         .replace(/<\/div>/g, '');
-      const nodesArr = this.getNodes(formatedHTML)
+      const nodesArr = getNodes(formatedHTML)
         .filter((v) => v.innerHTML !== '')
         .map((n) => {
+          if (n.nodeType === 3) {
+            // check for text node
+            return {
+              text: n.nodeValue,
+              color: '#000',
+              backgroundColor: '#fff',
+              fontSize: '16px'
+            };
+          }
           return {
             text: n.textContent,
             color: n.style.color || '#000',

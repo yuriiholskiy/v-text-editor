@@ -44,7 +44,7 @@ export default {
   position: fixed;
   bottom: 2rem;
   left: 0;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
 }
 .add-info-btn {
   display: block;
