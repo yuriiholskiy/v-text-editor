@@ -82,7 +82,7 @@ export default {
       // combine by color property
       // can change to bgColor, etc.
       const combinedByProp = groupBy([prop])(this.content);
-      const combinedByAllAllProps = groupBy([
+      const combinedByAllProps = groupBy([
         'color',
         'fontSize',
         'backgroundColor'
@@ -100,9 +100,9 @@ export default {
         }
       });
       this.output = {
-        arr: uniqueArray(arr, prop),
+        combined: uniqueArray(arr, prop),
         // for testing
-        combinedByAllAllProps
+        combinedByAllProps
       };
       this.isShowResult = true;
     }

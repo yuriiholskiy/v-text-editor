@@ -19,6 +19,7 @@ export default {
   color: #fff;
   font-size: 0.9rem;
   transition: 0.3s transform;
+  cursor: pointer;
 }
 .btn:not(:first-child) {
   margin-left: 1rem;

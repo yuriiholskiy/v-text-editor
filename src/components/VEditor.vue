@@ -37,6 +37,7 @@ export default {
         .replace(/<div>/g, '')
         .replace(/<\/div>/g, '');
       const nodesArr = getNodes(formatedHTML)
+        // remove <br /> tags
         .filter((v) => v.innerHTML !== '')
         .map((n) => {
           if (n.nodeType === 3) {
