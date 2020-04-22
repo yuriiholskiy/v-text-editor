@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { groupBy, uniqueArray } from '@/utils';
+import { groupBy, uniqueArray, combineStyles } from '@/utils';
 import VNavbar from '@/components/VNavbar';
 import VEditor from '@/components/VEditor';
 import VAddInfo from '@/components/VAddInfo';
@@ -100,7 +100,8 @@ export default {
         }
       });
       this.output = {
-        combined: uniqueArray(arr, prop),
+        combinedAll: uniqueArray(arr, prop),
+        combinedSiblings: combineStyles(this.content),
         // for testing
         combinedByAllProps
       };
